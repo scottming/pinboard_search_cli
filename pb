@@ -7,9 +7,9 @@ Usage:
     pb -u
 
 Examples:
-    pb linux          # 'linux' is which you search 
-    pb linux , git    # Search two tags, note the space before ','
-    pb linux -o 0     # Open the first bookmarks
+    pb linux          # 'linux' is what you search 
+    pb linux , git    # Search two tags, notice the space before ','
+    pb linux -o 0     # Open the first bookmark
 
 Options:
     -h --help       Show this screen.
@@ -39,19 +39,20 @@ else:
     df1['description'] = df1.description.str.wrap(20)
     df1['description'] = df1.description.apply(lambda x: x[:20])
     df1['tags'] = df.tags.apply(lambda x: str(x.encode('utf-8')))
-    df1['tags'] = df1.tags.apply(str.lower) #  make the tags to lower
+    df1['tags'] = df1.tags.apply(str.lower) #  Make the tags to lower
     
     pattern = '|'.join(arguments['<name>'])
     df2 = df1[df1.tags.str.contains(pattern, na=False)|
               df1.href.str.contains(pattern, na=False)]
 
-    # change the index
+    # Change the index
     count = df2.iloc[:,0].count()
     df2.index = range(count)
     
-    # print a pretty table
+    # Print a pretty table
     output = io.BytesIO()
-    df2.loc[:,['description','tags']].to_csv(output, encoding='utf-8', header=['站名','标签'])
+    df2.loc[:,['description','tags']].to_csv(output, 
+                encoding='utf-8', header=['站名','标签'])
     output.seek(0)
     pt = prettytable.from_csv(output)
 
