@@ -14,7 +14,7 @@ Examples:
 Options:
     -h --help       Show this screen.
     -v --version    Show version
-    -u --update     Update the local Pinboard'data
+    -u --update     Update the local Pinboard's data
     -o --open       Open bookmarks with ordinal number
 """
 
