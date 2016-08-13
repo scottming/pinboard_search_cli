@@ -20,7 +20,7 @@ pinboard_search_cli searches Pinboard bookmarks from local data. After installin
 
 ```shell
 $ pinboard api-token # Only the first time
-$ ./pb -us 
+$ ./pb -u
 ```
 to update your local data.
 
