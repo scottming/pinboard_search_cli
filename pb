@@ -1,45 +1,64 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
+"""pinboard_search_cli
 
+Usage:
+    pb <name> [( , <name>)] [-o <number>...] 
+    pb -u
+
+Examples:
+    pb linux          # 'linux' is which you search 
+    pb linux , git    # Search two tags, note the space before ','
+    pb linux -o 0     # Open the first bookmarks
+
+Options:
+    -h --help       Show this screen.
+    -v --version    Show version
+    -u --update     Update the local Pinboard'data
+    -o --open       Open bookmarks with ordinal number
+"""
+
+from docopt import docopt
+import io
+import os
 import pandas as pd
-import webbrowser as wb
-from io import StringIO
-import argparse
 import prettytable
 
-parser = argparse.ArgumentParser()
-parser.add_argument("tag", 
-                    help="print the name and tag")
-parser.add_argument('-o', '--open', action='store',dest='open',
-                    type=int, help="open the url")
-args = parser.parse_args()
-n = args.open
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='pinboard_search_cli 0.2')
 
-df = pd.read_json('.pinboard_data.json')
-df1 = df.loc[:,['description','href','tags','time']]
-df1['description'] = df1.description.str.wrap(20)
-df1['description'] = df1.description.apply(lambda x: x[:20])
-df1['tags'] = df1.tags.apply(str.lower)
+if arguments['--update'] == True:
+    a = os.system('pinboard bookmarks > ~/.pinboard_data.json')
+    print('Update Done!')
 
-if len(args.tag) <= 2:
-	df2 = df1[df1.tags.str.contains(args.tag, na=False)]
 else:
-	df2 = df1[df1.tags.str.contains(args.tag, na=False)|
-		  	  df1.href.str.contains(args.tag, na=False)]
+    df = pd.read_json('~/.pinboard_data.json')
+    df1 = df.loc[:,['description','href','tags','time']]
 
-count = df2.iloc[:,0].count()
-df2.index = range(count)
+    # Select the first 20 characters
+    df1['description'] = df1.description.str.wrap(20)
+    df1['description'] = df1.description.apply(lambda x: x[:20])
+    df1['tags'] = df.tags.apply(lambda x: str(x.encode('utf-8')))
+    df1['tags'] = df1.tags.apply(str.lower) #  make the tags to lower
+    
+    pattern = '|'.join(arguments['<name>'])
+    df2 = df1[df1.tags.str.contains(pattern, na=False)|
+              df1.href.str.contains(pattern, na=False)]
 
+    # change the index
+    count = df2.iloc[:,0].count()
+    df2.index = range(count)
+    
+    # print a pretty table
+    output = io.BytesIO()
+    df2.loc[:,['description','tags']].to_csv(output, encoding='utf-8', header=['站名','标签'])
+    output.seek(0)
+    pt = prettytable.from_csv(output)
 
-output = StringIO()
-df2.loc[:,['description','tags']].to_csv(output, header=['站名','标签'])
-output.seek(0)
-pt = prettytable.from_csv(output)
-
-if args.open == None:
-	print(pt)
-else:
-	href = df2['href'].iloc[n]
-	wb.open_new_tab(href)
-
-
+    if arguments['--open'] == False:
+        print(pt)
+    else:
+        n = [int(i) for i in arguments['<number>']]
+        href = df2['href'].iloc[n]
+        for i in list(href.values):
+            os.system('open %s' % i)
