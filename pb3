@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding:utf-8 -*-
 """pinboard_search_cli for Python3
 
 Usage:
@@ -40,7 +39,6 @@ else:
     # Select the first 20 characters
     df1['description'] = df1.description.str.wrap(20)
     df1['description'] = df1.description.apply(lambda x: x[:20])
-    df1['tags'] = df.tags.apply(lambda x: str(x.encode('utf-8')))
     df1['tags'] = df1.tags.apply(str.lower) #  Make the tags to lower
     
     pattern = '|'.join(arguments['<name>'])
@@ -53,8 +51,7 @@ else:
     
     # Print a pretty table
     output = io.StringIO()
-    df2.loc[:,['description','tags']].to_csv(output, 
-                encoding='utf-8', header=['站名','标签'])
+    df2.loc[:,['description','tags']].to_csv(output, header=['站名','标签'])
     output.seek(0)
     pt = prettytable.from_csv(output)
 
