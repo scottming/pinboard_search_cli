@@ -11,7 +11,7 @@ $ git clone https://github.com/scottming/pinboard_search_cli.git
 Decorator packages are required for pinboard_search_cli.
 
 ```shell
-$ pip install pinboard pandas prettytable
+$ pip install pinboard pandas prettytable docopt
 ```
 
 ## Usage
