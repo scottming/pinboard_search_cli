@@ -21,8 +21,6 @@ Options:
 from docopt import docopt
 import io
 import os
-import pandas as pd
-import prettytable
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='pinboard_search_cli 0.2')
@@ -32,6 +30,8 @@ if arguments['--update'] == True:
     print('Update Done!')
 
 else:
+    import pandas as pd
+    import prettytable
     df = pd.read_json('~/.pinboard_data.json')
     df1 = df.loc[:,['description','href','tags','time']]
 
