@@ -4,13 +4,13 @@
 
 Get the latest version of pinboard_search_cli
 
-```shell
+```bash
 $ git clone https://github.com/scottming/pinboard_search_cli.git
 ```
 
 Decorator packages are required for pinboard_search_cli.
 
-```shell
+```bash
 $ pip install pinboard pandas prettytable docopt
 ```
 
@@ -18,7 +18,7 @@ $ pip install pinboard pandas prettytable docopt
 
 pinboard_search_cli searches Pinboard bookmarks from local data. After installing the decorator packages, use
 
-```shell
+```bash
 $ pinboard api-token # Only the first time
 $ ./pb -u
 ```
@@ -26,23 +26,23 @@ to update your local data.
 
 Other examples
 
-```shell
+```bash
 $ ./pb -h
 pinboard_search_cli
 
 Usage:
-    pb <name> [( , <name>)] [-o <number>...] 
+    pb <name> [( , <name>)] [-o <number>...]
     pb -u
 
 Examples:
-    pb linux          # 'linux' is what you search 
-    pb linux , git    # Search two tags, notice the space before ','
-    pb linux -o 0     # Open the first bookmark
+    pb linux            'linux' is what you search
+    pb linux , git      Search two tags, notice the space before ','
+    pb linux -o 0       Open the first bookmark
 
 Options:
-    -h --help       Show this screen.
-    -v --version    Show version
-    -u --update     Update the local Pinboard's data
-    -o --open       Open bookmarks with ordinal number
+    -h --help           Show this screen.
+    -v --version        Show version
+    -u --update         Update the local Pinboard's data
+    -o --open           Open bookmarks with ordinal number
 ```
 

@@ -6,15 +6,15 @@ Usage:
     pb -u
 
 Examples:
-    pb linux          # 'linux' is what you search 
-    pb linux , git    # Search two tags, notice the space before ','
-    pb linux -o 0     # Open the first bookmark
+    pb linux            'linux' is what you search 
+    pb linux , git      Search two tags, notice the space before ','
+    pb linux -o 0       Open the first bookmark
 
 Options:
-    -h --help       Show this screen.
-    -v --version    Show version
-    -u --update     Update the local Pinboard's data
-    -o --open       Open bookmarks with ordinal number
+    -h --help           Show this screen.
+    -v --version        Show version
+    -u --update         Update the local Pinboard's data
+    -o --open           Open bookmarks with ordinal number
 """
 
 from docopt import docopt
