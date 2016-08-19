@@ -20,11 +20,20 @@ Options:
 from docopt import docopt
 import io
 import os
-import pandas as pd
-import prettytable
+import pickle
+from os.path import expanduser
+home = expanduser('~')
+
+def save_obj(obj, name):
+    with open(home + '/.' + name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+def load_obj(name):
+    with open(home + '/.' + name + '.pkl', 'rb') as f:
+        return pickle.load(f)
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='pinboard_search_cli 0.2')
+    arguments = docopt(__doc__, version='pinboard_search_cli 0.3')
 
 if arguments['--update'] == True:
     # a = os.system('pinboard bookmarks > ~/.pinboard_data.json')
@@ -32,7 +41,10 @@ if arguments['--update'] == True:
           'You should switch to Python2 and Run'
           '\n\n    ./pb -h\n\nif you want to update the local data.')
 
-else:
+elif len(arguments['<name>']) >=1 & arguments['--open'] == False:
+    import pandas as pd
+    import prettytable
+
     df = pd.read_json('~/.pinboard_data.json')
     df1 = df.loc[:,['description','href','tags','time']]
 
@@ -54,11 +66,11 @@ else:
     df2.loc[:,['description','tags']].to_csv(output, header=['站名','标签'])
     output.seek(0)
     pt = prettytable.from_csv(output)
+    print(pt)
+    df3 = df2['href'].to_dict()
+    save_obj(df3,'pinboard_url')
 
-    if arguments['--open'] == False:
-        print(pt)
-    else:
-        n = [int(i) for i in arguments['<number>']]
-        href = df2['href'].iloc[n]
-        for i in list(href.values):
-            os.system('open %s' % i)
+else:
+    href = load_obj('pinboard_url')
+    for i in arguments['<number>']:
+        os.system('cygstart %s' % href[int(i)])
