@@ -73,4 +73,4 @@ elif len(arguments['<name>']) >=1 & arguments['--open'] == False:
 else:
     href = load_obj('pinboard_url')
     for i in arguments['<number>']:
-        os.system('cygstart %s' % href[int(i)])
+        os.system('open %s' % href[int(i)])
